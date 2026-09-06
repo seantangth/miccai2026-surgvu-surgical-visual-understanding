@@ -1,0 +1,1 @@
+Hello. We are team A P C T D C, a one-person team from Schneider Electric Taiwan. We entered both categories. In Category One, weakly supervised tool detection, our final score was zero point four nine three. In Category Two, surgical video question answering, zero point six one nine.

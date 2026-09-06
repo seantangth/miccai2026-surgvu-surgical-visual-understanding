@@ -1,0 +1,5 @@
+The challenge gives us tool presence labels, not boxes. The question is how to turn presence into localisation. Our answer is to use the presence label as a gate, rather than as a target.
+
+We sample frames at one per second, and crop them to match the geometry of the test set. A teacher ensemble of two R T DETR models proposes boxes, and we fuse them with weighted box fusion.
+
+Then comes the gate. We keep only frames where the box count of each class exactly equals the number of that tool installed at that second, and every box is above confidence zero point three five. Twenty six percent of frames pass. We train a student on them, and that student becomes the next teacher, which raises the pass rate to forty one percent. The loop converges because the gate is external to the model.

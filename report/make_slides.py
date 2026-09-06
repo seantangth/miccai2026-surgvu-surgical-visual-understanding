@@ -4,7 +4,7 @@
 只填內容，不動 master、layout、配色與標題文字。
 用法：python make_slides.py <template.pptx> <out.pptx> <figure.png>
 """
-import sys
+import sys, pathlib
 from pptx import Presentation
 from pptx.util import Inches, Pt
 from pptx.dml.color import RGBColor
@@ -138,47 +138,20 @@ fill(body_of(s4), [
 ], size=19, gap=15)
 
 
-# ------------------------------------------------------- 備忘稿（錄影用，共 3 分鐘）
-NOTES = {
-    1: """[0:00-0:20]  Hello. We are team APC underscore TDC, a one-person team from Schneider
-Electric Taiwan. We entered both categories. Category 1, weakly supervised tool detection,
-final mAP zero point four nine three. Category 2, surgical video question answering,
-BERTScore F1 zero point six one nine. Everything you will see is public: code, weights,
-and the report.""",
-
-    2: """[0:20-1:20]  The challenge gives us tool presence labels, not boxes. So the question is
-how to turn presence into localisation. Our answer is to use the presence label as a gate
-rather than as a target. We sample frames at one frame per second and crop them to the same
-geometry as the test set. A teacher ensemble of two RT-DETR models proposes boxes, and we
-fuse them with weighted box fusion. Then the gate: we keep only the frames where the number
-of boxes of each class is exactly equal to the number of that tool installed at that second,
-and where every box is above conf zero point three five. Twenty six percent of frames pass.
-We train a student on them, and that student becomes the next teacher, which raises the pass
-rate to forty one percent. The loop converges because the gate is external to the model.""",
-
-    3: """[1:20-2:20]  Five decisions mattered. First, scale beats recipe. Going from twenty to two
-hundred eighty videos was worth plus zero point zero five two. Every recipe change we tried
-was worth at most zero point zero zero six. Second, let the weak label do the filtering; an
-exact count match is model independent, so the iteration does not drift. Third, never
-size-filter pseudo-labels: we tried, and it removed exactly the near and far field samples
-that carry the scale diversity. Fourth, and this one cost us the most: never keep a frame
-whose visible tool has no box. We excluded three classes from the targets but kept their
-images, and sixty five thousand frames taught the detector that a visible prograsp is
-background. Fifth, our remaining headroom was box tightness, not recall. Training at eight
-hundred pixels and fusing two resolutions were both worth more at AP75 than at AP50.""",
-
-    4: """[2:20-3:00]  Briefly, what did not work, because we think this is the more useful half.
-Thirty nine inference-time variants had a ceiling of half a point. Ten temporal
-post-processing variants were all negative. And the one that nearly fooled us: we read the robot
-interface with OCR to relabel the rare classes. On a tool-presence proxy metric it looked
-like a large win, from zero point five seven eight to zero point eight one nine. On real mAP
-it was negative. Two rulers, opposite directions. One honest caveat: our ablations hold out
-the student but not the teacher, so please read the paired differences, not the absolute
-numbers. Thank you.""",
-}
-for i, sl in enumerate(prs.slides, 1):
-    if i in NOTES:
-        sl.notes_slide.notes_text_frame.text = " ".join(NOTES[i].split())
+# ---------------------------------- 備忘稿：直接讀 narration/，與 TTS 稿保持單一來源
+NARR = pathlib.Path(__file__).resolve().parent / "narration"
+if NARR.is_dir():
+    total = 0
+    for i, sl in enumerate(prs.slides, 1):
+        f = NARR / f"slide{i}.txt"
+        if not f.exists():
+            continue
+        text = " ".join(f.read_text().split())
+        total += len(text.split())
+        sl.notes_slide.notes_text_frame.text = text
+    print(f"備忘稿取自 narration/：合計 {total} 字 ≈ {total/2.5:.0f}–{total/2.7:.0f} 秒")
+else:
+    print("找不到 narration/，備忘稿留空")
 
 prs.save(OUT)
 print("wrote", OUT)

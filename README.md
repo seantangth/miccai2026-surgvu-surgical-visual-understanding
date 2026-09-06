@@ -74,7 +74,8 @@ category1/
 category2/
   container/       the submitted Grand Challenge algorithm container (rule-based)
 report/            LaTeX method report (main.pdf), 3-minute presentation
-                   (APC_TDC_presentation.pptx, narration in the speaker notes)
+                   (APC_TDC_presentation.pptx) and its narration script
+                   (report/narration/, also mirrored in the speaker notes)
 ```
 
 Scripts that used to hold an absolute path now read `SURGVU_ROOT` from the environment and

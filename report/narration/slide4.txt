@@ -1,0 +1,5 @@
+What did not work, which we think is the more useful half. Thirty nine inference time variants had a ceiling of half a point. Ten temporal post processing variants were all negative.
+
+And the one that nearly fooled us. We read the robot interface with O C R to relabel the rare classes. On a tool presence proxy metric it looked like a large win, from zero point five seven eight to zero point eight one nine. On real mean A P it was negative. Two rulers, opposite directions.
+
+One honest caveat. Our ablations hold out the student but not the teacher, so please read the paired differences, not the absolute numbers. Thank you.
