@@ -1,0 +1,28 @@
+# 權重與大型工件：見 GitHub Release
+*.pt
+*.pth
+*.onnx
+*.tar.gz
+*.npz
+*.mp4
+*.zip
+
+# 官方資料與衍生影格（依挑戰規則不得轉散布）
+frames*/
+*_frames/
+1_data/
+pseudo_*/
+cat1_yolo*/
+
+# LaTeX 編譯產物
+*.aux
+*.log
+*.blg
+*.bbl
+*.out
+*.synctex.gz
+
+__pycache__/
+*.pyc
+.DS_Store
+venv/

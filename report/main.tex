@@ -1,0 +1,90 @@
+\documentclass{article}
+%*** general packages ***
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.pdf,.jpeg,.jpg,.png}
+\usepackage{color}
+\usepackage{subfig}
+\usepackage{amssymb, amsmath}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage{booktabs}
+\usepackage{colortbl}
+\usepackage{xcolor}
+\usepackage{xfrac}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage[linesnumbered,ruled]{algorithm2e}
+\usepackage[numbers,square,sort&compress]{natbib}
+\usepackage{rotating}
+\usepackage{geometry}
+\newgeometry{vmargin={1in}, hmargin={1in}}
+\usepackage[utf8]{inputenc}
+\usepackage{adjustbox}
+\usepackage{url}
+\usepackage{placeins}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{authblk}
+
+% ============================================================================
+% SURGVU CHALLENGE 2026 TEAM REPORT
+% ============================================================================
+%
+% HOW TO USE:
+%   1. Fill in your team name, author names, and affiliations in the
+%      \title{}, \author{}, and \affil{} fields below (search for
+%      "STEP 1", "STEP 2", "STEP 3").
+%   2. Rename YOUR-TEAM-NAME.tex to your team name (e.g., ISRG.tex).
+%   3. Rename the TeamDocs2026/YOUR-TEAM-NAME/ folder to match
+%      (e.g., TeamDocs2026/ISRG/).
+%   4. Update the \input{} line below to match (search for "STEP 4").
+%   5. Update \teamgithub{} with your public GitHub repository URL (search for
+%      "STEP 5").
+%   6. Write your report in YOUR-TEAM-NAME.tex (see instructions inside).
+%   7. Add your references to references.bib.
+%   8. Place your figures in TeamDocs2026/YOUR-TEAM-NAME/
+%      (e.g., TeamDocs2026/ISRG/figure1.png).
+%   9. Compile this file (main.tex) to preview your report.
+%
+% IMPORTANT: The organizers will incorporate your YOUR-TEAM-NAME.tex,
+% references.bib, and the author/affiliation information from this file
+% directly into the final challenge paper.
+% ============================================================================
+
+% *** STEP 5: done ***
+\newcommand{\teamgithub}{https://github.com/seantangth/miccai2026-surgvu-surgical-tool-detection-vqa}
+
+% *** STEP 1: done ***
+\title{SurgVU Challenge 2026 --- Team \textbf{APC\_TDC}\\[0.5em]
+\large \textit{Team Report}}
+\date{}
+
+% *** STEP 2: List all authors. Add or remove \author{} lines as needed.
+%             Use \thanks{} for equal contribution or correspondence notes.
+%             Example:
+%               \author[1]{Jane Smith}
+%     
+\author[1]{Tze-Hsiang Tang}
+
+% *** STEP 3: List all affiliations. Add or remove \affil{} lines as needed.
+%             Match the numbers in \author[] to the numbers here.
+%             Example:
+%               \affil[1]{Department of Computer Science, University of Example, City, Country}
+%               \affil[2]{Institute of Medical Imaging, Another University, City, Country}
+\affil[1]{Schneider Electric Taiwan Co., Ltd., Taipei, Taiwan}
+
+\begin{document}
+\maketitle
+
+\bigskip
+\hrule
+\bigskip
+
+% *** STEP 4: done ***
+\input{APC_TDC}
+
+\clearpage
+\bibliographystyle{unsrt}
+\bibliography{references}
+
+\end{document}
