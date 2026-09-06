@@ -192,8 +192,11 @@ capped at 100 boxes per frame at confidence ≥ 0.05 with true confidence values
 wall-clock guard falls back to a single model if the projected runtime would exceed the
 per-case limit.
 
-Model weights are attached to the [GitHub release](../../releases) and are also bound to the
-Grand Challenge algorithm for which the organizers have editor access.
+Model weights are attached to the
+[v1.0-final release](https://github.com/seantangth/miccai2026-surgvu-surgical-tool-detection-vqa/releases/tag/v1.0-final):
+`cat1-final-model.tar.gz` is the exact algorithm-model tarball we submitted (it extracts to
+`/opt/ml/model`), and the two `.pt` files are also provided individually. The same weights are
+bound to the Grand Challenge algorithm, for which the organizers have editor access.
 
 ## Category 2 method
 
