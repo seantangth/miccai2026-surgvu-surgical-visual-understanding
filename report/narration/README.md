@@ -37,3 +37,15 @@
 3. `A P C T D C` — 確認是逐字母唸，不是拼成一個字。
 
 投影片的備忘稿與這些檔案內容一致，由 `../make_slides.py` 自動帶入。
+
+## 生成完音檔之後
+
+把四個音檔命名為 `slide1`、`slide2`、`slide3`、`slide4`（副檔名 mp3／wav／m4a 皆可）放在同一個資料夾，然後：
+
+```bash
+python ../make_video.py ../APC_TDC_presentation.pptx <音檔資料夾> ../APC_TDC_presentation.mp4
+```
+
+腳本會把投影片以 4K 渲染再降到 1080p（字比較銳利），每張配上對應音軌，
+串成一支 H.264 + AAC 的 MP4，最後印出總長並檢查是否超過 3 分鐘上限。
+以假音檔實測過：1920×1080、30 fps、48 kHz 立體聲，176.6 秒約 8 MB。
