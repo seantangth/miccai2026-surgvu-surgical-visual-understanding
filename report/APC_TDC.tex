@@ -68,7 +68,7 @@ $\geq 0.05$ with true confidence values. A wall-clock guard falls back to the
 single 640 model if the projected runtime exceeds the limit.
 
 \medskip
-\noindent\textbf{Category 2.} We classify each question into one of six types from the position of
+\noindent\textbf{Category 2.} We classify each question into one of four routes from the position of
 its auxiliary verb and wh-word, then emit a templated sentence: BERTScore against
 short reference answers rewards matching the expected answer \emph{form}. Yes/no polarity for
 five high-recall tools is decided visually by our C1 detector over 15 sampled frames; the rest
@@ -83,7 +83,7 @@ trained on one NVIDIA A100 SXM4 40\,GB. We set the optimizer explicitly to AdamW
 $5\times10^{-4}$, \texttt{warmup\_bias\_lr} $=0$): Ultralytics silently switches
 \texttt{optimizer=auto} to MuSGD at lr $0.01$ above 10{,}000 iterations, which would have changed
 the recipe as the dataset grew. The submitted models use 16 epochs,
-\texttt{close\_mosaic} 6, batch 24 at 640 (5.8\,h) and batch 20 at 800 (8.0\,h), with default
+\texttt{close\_mosaic} 6, batch 24 at 640 (5.8\,h) and batch 20 at 800 (7.6\,h), with default
 mosaic, scale and flip augmentation. The final training set is 93,660 frames. For ablations we
 held official validation videos 1 and 7 out of the student; for the submitted
 models we merged all annotated official videos into training and submit \texttt{last.pt}.

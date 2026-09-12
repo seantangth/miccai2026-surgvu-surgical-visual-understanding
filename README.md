@@ -61,7 +61,7 @@ Recorded here so others do not spend compute on it.
 | Training on official ground truth only | mean 0.4024 vs 0.5905 mixed |
 | Fine-tuning a mixed-trained model on ground truth only | ND AP75 0.51 → 0.36 |
 | Frame-level pseudo-label "cleaning" with a P2–P98 box-size filter | worse across the board |
-| Elimination-based class assignment for undetected classes | 0–35% IoU≥0.5 hit rate |
+| Elimination-based class assignment for undetected classes | 2–28% coverage, IoU≥0.5 hit rate 0.00–0.35 on three probe classes (a fourth, with 13 GT frames, reached 0.92) |
 
 ## Repository layout
 
@@ -156,7 +156,7 @@ Stages, in order:
    `category1/training/job_v12_rA2_800.sh` is the exact self-contained job that produced the
    800-pixel model, including the save-before-shutdown guard.
 
-Training used one NVIDIA A100 SXM4 40 GB on Lambda Cloud: 5.8 h at 640 px, 8.0 h at 800 px.
+Training used one NVIDIA A100 SXM4 40 GB on Lambda Cloud: 5.8 h at 640 px, 7.6 h at 800 px.
 
 **Recipe warning.** Ultralytics silently switches `optimizer=auto` to MuSGD at lr 0.01 once
 iterations exceed 10,000, so the recipe changes under you as the dataset grows. We set the
@@ -204,14 +204,16 @@ bound to the Grand Challenge algorithm, for which the organizers have editor acc
 
 `category2/container/inference_v05.py` is rule-based, with no generative model. BERTScore
 against short reference answers rewards matching the expected answer *form*, so we classify
-each question into one of six types from the position of its auxiliary verb and wh-word and
-emit a templated sentence. Yes/no polarity for five tools with high detector recall is decided
+each question into one of four routes (purpose, count, yes/no, and wh-question) from the
+position of its auxiliary verb and wh-word, then emit a templated sentence; the wh route
+fans out into organ, task, tool list, forceps type and procedure. Yes/no polarity for five tools with high detector recall is decided
 visually by the Category 1 detector over 15 sampled frames (confidence 0.35, at least 4
 frames); the remaining tools fall back to a prior estimated from 30-second windows of
 `tools.csv`.
 
 The single largest gain came from fixing the router, not from the vision: 16 of 101 Final
-cases were answering a different question type than the one asked, worth +0.023 once fixed.
+cases answered a different question type than the one asked. The fix recovered 11 of them;
+that submission's net gain was +0.023, after a prior-flip change cost a few cases back.
 
 ## Disclosure
 
