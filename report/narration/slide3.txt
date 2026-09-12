@@ -1,4 +1,4 @@
-Five decisions mattered. First, scale beats recipe. Going from twenty videos to two hundred and eighty was worth plus zero point zero five two, while every recipe change we tried was worth at most zero point zero zero six.
+Five decisions mattered. First, scale beats recipe. Going from twenty videos to two hundred and eighty was worth plus zero point zero five two. Every recipe change we tried: at most zero point zero zero six.
 
 Second, let the weak label do the filtering. An exact count match is model independent, so the iteration does not drift.
 
@@ -6,4 +6,4 @@ Third, never size filter your pseudo labels. It removes the near and far field s
 
 Fourth, and this cost us the most, never keep a frame whose visible tool has no box. Sixty five thousand such frames taught our detector that a visible prograsp is background.
 
-Fifth, our remaining headroom was box tightness, not recall. Training at eight hundred pixels and fusing two resolutions both helped more at A P seventy five than at A P fifty.
+Fifth, our remaining headroom was box tightness, not recall. Training at eight hundred pixels gave plus zero point zero two seven five at A P seventy five. Two model fusion gave plus zero point zero three seven six, though measured on a six forty pair, not on our submitted six forty plus eight hundred.

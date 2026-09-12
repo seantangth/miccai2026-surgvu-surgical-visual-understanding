@@ -40,7 +40,7 @@ from the student, official evaluation protocol):
 | Change | mean mAP | AP50 | AP75 |
 |---|---|---|---|
 | 800 px training vs 640 px, same data | +0.0131 | +0.0050 | +0.0275 |
-| Cross-model WBF vs single model | +0.0166 | +0.0067 | +0.0376 |
+| Cross-model WBF vs single model (a 640 px pair, not the submitted 640/800 pair) | +0.0166 | +0.0067 | +0.0376 |
 | OCR-gated relabelling vs strict count gate | −0.0127 | −0.0066 | −0.0086 |
 
 Both positive gains sit almost entirely at high IoU: they tighten boxes rather than find
@@ -221,8 +221,10 @@ Required by the challenge rules.
   `rtdetr-l.pt` shipped by Ultralytics.
 - **Model-assisted annotation.** Bounding boxes for the three never-detected classes
   (stapler, tip-up fenestrated grasper, prograsp forceps) were annotated with a large language
-  model (Claude Opus 5) on 718 frames and expanded to 2,298 training frames by
-  template-matching propagation, i.e. 2.5% of the training set. The prompting protocol,
+  model (Claude Opus 5): 718 frames annotated, 287 accepted, expanded to 2,096 training
+  frames by template-matching propagation. A further 202 grasping-retractor frames came from
+  32 hand-seeded boxes propagated the same way, giving 2,298 model-assisted frames in total,
+  i.e. 2.5% of the training set. The prompting protocol,
   acceptance thresholds and propagation code are in `category1/data_pipeline/opus*.py`. Quality
   was checked by visual sampling only; there is no ground truth for these classes in the
   official validation set. The annotation files themselves are available to the organizers on

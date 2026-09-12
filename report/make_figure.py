@@ -1,4 +1,4 @@
-"""產生 seantangth 報告的 pipeline 圖（Category 1）。
+"""產生 APC_TDC 報告的 pipeline 圖（Category 1）。
 輸出：TeamDocs2026/seantangth/figure1.png（300 dpi，白底）
 設計原則：兩排由左至右，連線只走方塊之間的空白通道，不穿越任何方塊。
 """
@@ -9,7 +9,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 
-OUT = Path(__file__).parent / "TeamDocs2026" / "seantangth" / "figure1.png"
+OUT = Path(__file__).parent / "TeamDocs2026" / "APC_TDC" / "figure1.png"
 
 INK = "#1a1a1a"
 GREY = "#6b6b6b"
@@ -68,7 +68,7 @@ line((116, 27.5), (37.5, 27.5))
 arrow((37.5, 27.5), (37.5, BOT_Y + H))
 
 # --- 下排：訓練與提交 -------------------------------------------------------
-box(1, 22, BOT_Y, "Model-assisted boxes", "3 zero-AP classes\n718 frames annotated\n$\\rightarrow$ 2,298 propagated", "model")
+box(1, 22, BOT_Y, "Model-assisted boxes", "718 LLM-annotated frames\n$\\rightarrow$ 2,096, plus 202\nseeded retractor frames", "model")
 box(26, 23, BOT_Y, "Training set", "93,660 frames\nofficial GT merged in\n(ALLGT)", "data")
 box(52, 21, BOT_Y, "Student training", "RT-DETR-L\n640 px and 800 px\nA100 40 GB", "model")
 box(76, 27, BOT_Y, "Submitted algorithm", "WBF of the 640 and 800\nmodels, $\\leq$100 boxes/frame\nat conf $\\geq$ 0.05", "model")

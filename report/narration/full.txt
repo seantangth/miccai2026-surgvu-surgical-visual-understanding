@@ -1,12 +1,12 @@
 Hello. We are team A P C T D C, a one-person team from Schneider Electric Taiwan. We entered both categories. In Category One, weakly supervised tool detection, our final score was zero point four nine three. In Category Two, surgical video question answering, zero point six one nine.
 
-The challenge gives us tool presence labels, not boxes. The question is how to turn presence into localisation. Our answer is to use the presence label as a gate, rather than as a target.
+The challenge gives us tool presence labels, not boxes. Our answer is to use the presence label as a gate, rather than as a target.
 
 We sample frames at one per second, and crop them to match the geometry of the test set. A teacher ensemble of two R T DETR models proposes boxes, and we fuse them with weighted box fusion.
 
 Then comes the gate. We keep only frames where the box count of each class exactly equals the number of that tool installed at that second, and every box is above confidence zero point three five. Twenty six percent of frames pass. We train a student on them, and that student becomes the next teacher, which raises the pass rate to forty one percent. The loop converges because the gate is external to the model.
 
-Five decisions mattered. First, scale beats recipe. Going from twenty videos to two hundred and eighty was worth plus zero point zero five two, while every recipe change we tried was worth at most zero point zero zero six.
+Five decisions mattered. First, scale beats recipe. Going from twenty videos to two hundred and eighty was worth plus zero point zero five two. Every recipe change we tried: at most zero point zero zero six.
 
 Second, let the weak label do the filtering. An exact count match is model independent, so the iteration does not drift.
 
@@ -14,9 +14,9 @@ Third, never size filter your pseudo labels. It removes the near and far field s
 
 Fourth, and this cost us the most, never keep a frame whose visible tool has no box. Sixty five thousand such frames taught our detector that a visible prograsp is background.
 
-Fifth, our remaining headroom was box tightness, not recall. Training at eight hundred pixels and fusing two resolutions both helped more at A P seventy five than at A P fifty.
+Fifth, our remaining headroom was box tightness, not recall. Training at eight hundred pixels gave plus zero point zero two seven five at A P seventy five. Two model fusion gave plus zero point zero three seven six, though measured on a six forty pair, not on our submitted six forty plus eight hundred.
 
-What did not work, which we think is the more useful half. Thirty nine inference time variants had a ceiling of half a point. Ten temporal post processing variants were all negative.
+What did not work. Thirty nine inference time variants had a ceiling of half a point. Ten temporal post processing variants were all negative.
 
 And the one that nearly fooled us. We read the robot interface with O C R to relabel the rare classes. On a tool presence proxy metric it looked like a large win, from zero point five seven eight to zero point eight one nine. On real mean A P it was negative. Two rulers, opposite directions.
 

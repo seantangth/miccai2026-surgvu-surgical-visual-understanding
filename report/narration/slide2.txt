@@ -1,4 +1,4 @@
-The challenge gives us tool presence labels, not boxes. The question is how to turn presence into localisation. Our answer is to use the presence label as a gate, rather than as a target.
+The challenge gives us tool presence labels, not boxes. Our answer is to use the presence label as a gate, rather than as a target.
 
 We sample frames at one per second, and crop them to match the geometry of the test set. A teacher ensemble of two R T DETR models proposes boxes, and we fuse them with weighted box fusion.
 

@@ -12,8 +12,8 @@ We entered both categories. Our Category~1 (C1) result rests on one finding from
 comparisons: the dominant lever here is the scale and scale-diversity of pseudo-labelled
 training data, not the architecture or the recipe. Every recipe change we tried moved the official score by at most $0.006$;
 growing the pseudo-label source from 20 to 280 videos moved it by $+0.052$. We therefore
-spent almost all of our compute on an iterative pseudo-labelling loop that uses the noisy
-tool-presence labels as an external gate on a teacher ensemble. For Category~2 (C2) we
+spent our compute on an iterative pseudo-labelling loop that uses the tool-presence labels as
+an external gate on a teacher ensemble. For Category~2 (C2) we
 answer with a rule-based router rather than a generative model.
 
 \subsubsection{Method Description}
@@ -28,14 +28,14 @@ ensemble; the accepted frames train a student that becomes the next teacher.}
 \end{figure}
 
 \noindent\textbf{Domain alignment.} Public validation frames are $640\times512$ crops of the
-$1280\times720$ feed. We reproduce that transform on training frames (crop $x\in[192,1088]$ at
-full height, resize to $640\times512$) so pseudo-labelling, training and inference share one
+$1280\times720$ feed. We reproduce that transform on training frames (crop $x\in[192,1088]$,
+resize to $640\times512$) so pseudo-labelling, training and inference share one
 geometry.
 
 \medskip
 \noindent\textbf{Weak labels.} We parse \texttt{tools.csv} per robot arm into the multiset of tools
 installed at every second, resolving overlaps on one arm in favour of the shorter
-interval and expanding labels across video parts.
+interval.
 
 \medskip
 \noindent\textbf{Pseudo-labelling.} A teacher ensemble of two RT-DETR-L~\cite{APC_TDC_Zhao2024}
@@ -49,7 +49,7 @@ filter: an earlier variant clipping box areas to the 2nd--98th percentile remove
 and far-field scale samples the detector needs and reduced AP75.
 
 \medskip
-\noindent\textbf{Iteration.} Retraining the teacher on its own accepted output raised the
+\noindent\textbf{Iteration.} Retraining the teacher on its own output raised the
 acceptance rate from $26\%$ to $41\%$ and the pool from 82k to 142k frames. Iterative
 pseudo-labelling converges here because \texttt{tools.csv} is an external, model-independent
 filter.
@@ -65,7 +65,7 @@ raised held-out detection of prograsp and stapler from $0.000$ to $0.255$ and $0
 \noindent\textbf{Inference.} The submitted container runs the 640 and 800 models and fuses
 their per-frame detections with WBF, emitting at most 100 boxes per frame at confidence
 $\geq 0.05$ with true confidence values. A wall-clock guard falls back to the
-single 640 model if the projected runtime exceeds the per-case limit.
+single 640 model if the projected runtime exceeds the limit.
 
 \medskip
 \noindent\textbf{Category 2.} We classify each question into one of six types from the position of
@@ -121,23 +121,23 @@ C2 Final & \, $+$ visual yes/no polarity & \textbf{0.6191} \\
 
 In paired ablations on a student hold-out (official videos 1 and 7), 800-pixel
 training gave $+0.0131$ mean mAP and $+0.0275$ AP75, and cross-model WBF gave $+0.0166$ and
-$+0.0376$; both gains sit at high IoU, i.e.\ they tighten boxes rather than find more tools. What did not work: 39 inference-time variants had a ceiling of $+0.005$; ten
+$+0.0376$ on a pair of 640-pixel models, not on the 640/800 pair we submitted; both gains sit at high IoU, i.e.\ they tighten boxes rather than find more tools. What did not work: 39 inference-time variants had a ceiling of $+0.005$; ten
 temporal post-processing variants were all negative; fine-tuning on official ground truth alone was worse
-than mixed training, returning the model to the scale prior of five videos.
+than mixed training.
 
 \medskip
 \noindent\textbf{Limitations.} These ablations isolate the student, not the pipeline: the
-teacher had seen the held-out videos, so absolute values are optimistic and only paired
-differences should be read. We also saw a proxy metric invert: tool-presence set-F1 on 2,820
+teacher had seen the held-out videos, so absolute values are optimistic. We also saw a proxy metric invert: tool-presence set-F1 on 2,820
 unseen frames rose from $0.578$ to $0.819$ for a relabelling scheme that was $-0.0127$ on
 official-protocol mAP. Session-level splits and a
 small human-annotated box set for the rare classes are the next steps.
 
 \medskip
 \noindent\textbf{Disclosure.} No external datasets were used. Bounding boxes for the three
-never-detected classes were annotated with a large language model (Claude Opus~5) on 718
-frames and expanded to 2,298 training frames by template matching ($2.5\%$ of the
-training set); the annotation protocol and code are in our repository and the label
-files are available to the organizers on request. A variant that read the da~Vinci
-interface with EasyOCR to gate pseudo-labels at training time only was evaluated but is not
-part of the submitted model.
+never-detected classes were annotated with a large language model (Claude Opus~5): 718
+frames annotated, 287 accepted, expanded to 2,096 training frames by template matching.
+A further 202 grasping-retractor frames came from 32 hand-seeded boxes propagated the same
+way, giving 2,298 model-assisted frames in total ($2.5\%$ of the training set). The
+annotation protocol and code are in our repository. A variant that read the da~Vinci
+interface with EasyOCR to gate pseudo-labels at training time was evaluated but is not part
+of the submitted model.

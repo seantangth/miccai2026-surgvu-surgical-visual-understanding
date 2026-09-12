@@ -114,7 +114,8 @@ fill(body_of(s3), [
      "  Three classes were excluded from the targets while their images stayed: 65,182 frames taught the detector"
      " that a visible prograsp is background, against 711 positive boxes. Deleting those frames: 0.000 → 0.255 detection."),
     ("5.  The remaining headroom is AP75, not recall.",
-     "  Common classes already sit at AP50 0.93. Training at 800 px: +0.0275 AP75. Fusing the 640 and 800 models: +0.0376."),
+     "  Needle driver sits at AP50 0.93 but AP75 0.51. Training at 800 px: +0.0275 AP75. Two-model fusion: +0.0376 AP75,"
+     " measured on a pair of 640 px models. Our submission fuses 640 with 800, a combination we could not measure locally."),
 ], size=20, gap=17)
 
 # ------------------------------------------- slide 4 What did not work
