@@ -195,7 +195,7 @@ wall-clock guard falls back to a single model if the projected runtime would exc
 per-case limit.
 
 Model weights are attached to the
-[v1.0-final release](https://github.com/seantangth/miccai2026-surgvu-surgical-tool-detection-vqa/releases/tag/v1.0-final):
+[v1.0-final release](https://github.com/seantangth/miccai2026-surgvu-surgical-visual-understanding/releases/tag/v1.0-final):
 `cat1-final-model.tar.gz` is the exact algorithm-model tarball we submitted (it extracts to
 `/opt/ml/model`), and the two `.pt` files are also provided individually. The same weights are
 bound to the Grand Challenge algorithm, for which the organizers have editor access.
@@ -223,7 +223,7 @@ Required by the challenge rules.
   `rtdetr-l.pt` shipped by Ultralytics.
 - **Model-assisted annotation.** Bounding boxes for the three never-detected classes
   (stapler, tip-up fenestrated grasper, prograsp forceps) were annotated with a large language
-  model (Claude Opus 5): 718 frames annotated, 287 accepted, expanded to 2,096 training
+  model: 718 frames annotated, 287 accepted, expanded to 2,096 training
   frames by template-matching propagation. A further 202 grasping-retractor frames came from
   32 hand-seeded boxes propagated the same way, giving 2,298 model-assisted frames in total,
   i.e. 2.5% of the training set. The prompting protocol,
@@ -244,7 +244,7 @@ Required by the challenge rules.
   author = {Tang, Tze-Hsiang},
   year   = {2026},
   note   = {MICCAI 2026 EndoVis SurgVU Challenge},
-  url    = {https://github.com/seantangth/miccai2026-surgvu-surgical-tool-detection-vqa}
+  url    = {https://github.com/seantangth/miccai2026-surgvu-surgical-visual-understanding}
 }
 ```
 

@@ -28,4 +28,4 @@ for tag in ("s1_i640","v1p_base","v3_s2"):
 print(f"{'model':9s} v {'class':26s} {'nGT':>5s} {'AP':>6s} {'AP50':>6s} {'AP75':>6s}  AP@.5 .55 .6 .65 .7 .75 .8 .85 .9 .95")
 for tag,v,name,ngt,ap,ap50,ap75,ap_t in rows:
     print(f"{tag:9s} {v} {name:26s} {ngt:5d} {ap:6.3f} {ap50:6.3f} {ap75:6.3f}  "+" ".join(f"{x:.2f}" for x in ap_t))
-json.dump([dict(tag=t,vid=v,cls=n,ngt=g,ap=a,ap50=b,ap75=c,ap_t=d) for t,v,n,g,a,b,c,d in rows], open("/private/tmp/claude-501/-Users-seantang-Desktop-Sean-The-Nexus-1-Projects-MICCAI-2026-SurgVU/298aeb49-7a94-4c62-abd1-a74fd0956e82/scratchpad/ap_by_iou.json","w"), indent=1)
+json.dump([dict(tag=t,vid=v,cls=n,ngt=g,ap=a,ap50=b,ap75=c,ap_t=d) for t,v,n,g,a,b,c,d in rows], open(os.environ.get("SURGVU_OUT", ".") + "/ap_by_iou.json", "w"), indent=1)

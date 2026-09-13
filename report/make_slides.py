@@ -82,7 +82,7 @@ for sh in s1.shapes:                       # 換掉模板的假引用
         tf = sh.text_frame; tf.clear()
         no_bullet(tf.paragraphs[0])
         r = tf.paragraphs[0].add_run()
-        r.text = "Code, weights and report:  github.com/seantangth/miccai2026-surgvu-surgical-tool-detection-vqa"
+        r.text = "Code, weights and report:  github.com/seantangth/miccai2026-surgvu-surgical-visual-understanding"
         r.font.size = Pt(14); r.font.color.rgb = MUTED
 
 # -------------------------------------------------------------- slide 2 Method
