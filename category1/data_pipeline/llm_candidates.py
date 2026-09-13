@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """prograsp／tip-up 候選框版：s1 類別無關候選框（conf>=0.12，類別無關 NMS 0.6，最多 6 個）畫成 A-F 標在圖上，
-輸出 annotated 圖 + 批次檔（每批 10 幀），讓 Opus 做選擇題。用法：bsenv/bin/python opus_candidates.py"""
+輸出 annotated 圖 + 批次檔（每批 10 幀），讓 LLM 做選擇題。用法：bsenv/bin/python llm_candidates.py"""
 import json, os, cv2, numpy as np
 from pathlib import Path
 from ultralytics import RTDETR
 ROOT = Path(os.environ.get("SURGVU_ROOT", "."))
-sel = json.load(open(ROOT / "1_data/processed/opus_bbox/selection_v1.json"))
-ANN = ROOT / "1_data/processed/opus_bbox/annotated"; ANN.mkdir(exist_ok=True)
-BAT = ROOT / "1_data/processed/opus_bbox/batches"
+sel = json.load(open(ROOT / "1_data/processed/llm_bbox/selection_v1.json"))
+ANN = ROOT / "1_data/processed/llm_bbox/annotated"; ANN.mkdir(exist_ok=True)
+BAT = ROOT / "1_data/processed/llm_bbox/batches"
 model = RTDETR(str(ROOT / "4_models/v3/rtdetr_v3_s1/best.pt"))
 NAMES = ['needle_driver','monopolar_curved_scissor','force_bipolar','clip_applier','tip_up_fenestrated_grasper','cadiere_forceps','bipolar_forceps','vessel_sealer','suction_irrigator','bipolar_dissector','prograsp_forceps','stapler','permanent_cautery_hook_spatula','grasping_retractor']
 def iou(a, b):

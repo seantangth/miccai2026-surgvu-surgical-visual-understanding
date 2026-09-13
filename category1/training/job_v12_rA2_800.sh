@@ -305,7 +305,7 @@ GDRIVE="gdrive:MICCAI_2026_SurgVU"
 echo "########## RUN v12_rA2_800: rtdetr-l 800 rA2 data ALLGT 16ep  $(date -u) ##########"
 RUN_TAG=v12_rA2_800 MODELS=rtdetr-l.pt IMGSZ=800 EPOCHS=16 BATCH=20 PATIENCE=16 CLOSE_MOSAIC=6 CACHE=ram WORKERS=12 \
   ALLGT=1 USE_PSEUDO=1 PSEUDO_TAR=pseudo_rare_v3.tar.gz PSEUDO_DIR=pseudo_rare_v3 AGY_TAR=pseudo_agy_v3.tar.gz AGY_DIR=pseudo_agy_v3 \
-  EXTRA_TARS="pseudo_agybox_v1.tar.gz pseudo_scale_r1_shard0.tar.gz pseudo_scale_r1_shard1.tar.gz pseudo_opus_v1.tar.gz" \
+  EXTRA_TARS="pseudo_agybox_v1.tar.gz pseudo_scale_r1_shard0.tar.gz pseudo_scale_r1_shard1.tar.gz pseudo_llm_v1.tar.gz" \
   UIBLUR_P=0 UIBLUR_VAL=0 bash ~/train_v5.sh
 echo "TRAIN EXIT $?  $(date -u)"
 # 保存驗證（鐵律 G）：last.pt 必須在雲端且 >50 MB，否則不關機、留給人工處理

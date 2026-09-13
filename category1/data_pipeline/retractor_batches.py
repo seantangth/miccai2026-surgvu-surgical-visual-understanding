@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""retractor_batches.py — 把 opus_retractor 的候選幀切成每批 10 幀的 Opus 標註任務（自由標框）。
+"""retractor_batches.py — 把 llm_retractor 的候選幀切成每批 10 幀的 LLM 標註任務（自由標框）。
 grasping retractor 沒有候選框可選（偵測器對它全盲），所以只能自由標框，做法比照第二輪的 stapler。
-輸出：1_data/processed/opus_retractor/batches/retr_NNN.json
+輸出：1_data/processed/llm_retractor/batches/retr_NNN.json
 用法：bsenv/bin/python retractor_batches.py
 """
 import os
@@ -9,7 +9,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(os.environ.get("SURGVU_ROOT", "."))
-B = ROOT / "1_data/processed/opus_retractor"
+B = ROOT / "1_data/processed/llm_retractor"
 sel = json.load(open(B / "retractor_sel.json"))["retractor"]
 (B / "batches").mkdir(exist_ok=True); (B / "results").mkdir(exist_ok=True)
 

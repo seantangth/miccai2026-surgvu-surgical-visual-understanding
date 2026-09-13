@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""第二輪 Opus 批次（新影片池）：stapler 自由標框；tipup/prograsp 候選框選擇題。輸出到 1_data/processed/opus_bbox2/{batches,annotated}"""
+"""第二輪 LLM 批次（新影片池）：stapler 自由標框；tipup/prograsp 候選框選擇題。輸出到 1_data/processed/llm_bbox2/{batches,annotated}"""
 import json, os, cv2
 from pathlib import Path
 from ultralytics import RTDETR
-ROOT = Path(os.environ.get("SURGVU_ROOT", ".")); B2 = ROOT / "1_data/processed/opus_bbox2"
-sel = json.load(open(B2 / "opus2_selection.json")); (B2 / "batches").mkdir(exist_ok=True); (B2 / "annotated").mkdir(exist_ok=True); (B2 / "results").mkdir(exist_ok=True)
+ROOT = Path(os.environ.get("SURGVU_ROOT", ".")); B2 = ROOT / "1_data/processed/llm_bbox2"
+sel = json.load(open(B2 / "llm2_selection.json")); (B2 / "batches").mkdir(exist_ok=True); (B2 / "annotated").mkdir(exist_ok=True); (B2 / "results").mkdir(exist_ok=True)
 NAMES = ['needle_driver','monopolar_curved_scissor','force_bipolar','clip_applier','tip_up_fenestrated_grasper','cadiere_forceps','bipolar_forceps','vessel_sealer','suction_irrigator','bipolar_dissector','prograsp_forceps','stapler','permanent_cautery_hook_spatula','grasping_retractor']
 CONV = {
  'stapler': "STAPLER (da Vinci SureForm/EndoWrist stapler): a large, elongated silver/grey jaw assembly (cartridge + anvil) attached to a thick shaft via a wrist hinge; the jaw is much longer than any grasper jaw and may show a staple line. BOX RULE: the box must cover the wrist/hinge PLUS THE ENTIRE JAW ASSEMBLY all the way to the distal tip of the anvil. Do NOT include the long shaft behind the wrist.",

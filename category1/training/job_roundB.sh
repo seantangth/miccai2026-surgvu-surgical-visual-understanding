@@ -49,11 +49,11 @@ fi
 echo "=== [B3] wait other shard r2  $(date -u) ==="
 T0=$(date +%s)
 while :; do rclone lsl "$GDRIVE/data/pseudo_scale_r2_shard${OTHER}.tar.gz" 2>/dev/null | grep -q . && break; [ $(( ($(date +%s) - T0) / 60 )) -ge 120 ] && { echo "other shard r2 timeout, train with own shard only"; break; }; sleep 120; done
-EXTRA="pseudo_agybox_v1.tar.gz pseudo_opus_v1.tar.gz pseudo_scale_r2_shard0.tar.gz pseudo_scale_r2_shard1.tar.gz"
+EXTRA="pseudo_agybox_v1.tar.gz pseudo_llm_v1.tar.gz pseudo_scale_r2_shard0.tar.gz pseudo_scale_r2_shard1.tar.gz"
 rclone lsl "$GDRIVE/data/pseudo_scale_r2_orig.tar.gz" 2>/dev/null | grep -q . && EXTRA="$EXTRA pseudo_scale_r2_orig.tar.gz"
 HAVE=""; for f in $EXTRA; do rclone lsl "$GDRIVE/data/$f" 2>/dev/null | grep -q . && HAVE="$HAVE $f"; done
 echo "=== [B4] train Round B with:$HAVE  $(date -u) ==="
-rm -rf ~/cat1_yolo ~/cat1_yolo_v3 ~/pseudo_rare_v3 ~/pseudo_agy_v3 ~/pseudo_agybox_v1 ~/pseudo_scale_r1_shard* ~/pseudo_scale_r2_* ~/pseudo_opus_v1; rm -f ~/pseudo_scale_r*.tar.gz ~/pseudo_opus_v1.tar.gz
+rm -rf ~/cat1_yolo ~/cat1_yolo_v3 ~/pseudo_rare_v3 ~/pseudo_agy_v3 ~/pseudo_agybox_v1 ~/pseudo_scale_r1_shard* ~/pseudo_scale_r2_* ~/pseudo_llm_v1; rm -f ~/pseudo_scale_r*.tar.gz ~/pseudo_llm_v1.tar.gz
 # 若 r2_orig 存在則不再併入 pseudo_rare_v3（同一批影片的舊標籤），避免重複
 PSEUDO_TAR=pseudo_rare_v3.tar.gz; PSEUDO_DIR=pseudo_rare_v3
 echo "$HAVE" | grep -q r2_orig && { PSEUDO_TAR=pseudo_agy_v3.tar.gz; PSEUDO_DIR=pseudo_agy_v3; }

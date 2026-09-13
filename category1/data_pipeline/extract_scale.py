@@ -17,7 +17,7 @@ URL = "https://storage.googleapis.com/isi-surgvu/surgvu24_videos_only.zip"
 X0, X1, Y0, Y1 = 192, 1088, 0, 720      # crop_params.json（720p → 內容區 896×720）
 OUT_W, OUT_H = 640, 512
 BOOST = ["tip-up fenestrated grasper", "stapler", "prograsp forceps", "permanent cautery hook/spatula", "vessel sealer",
-         "clip applier", "grasping retractor", "force bipolar", "cadiere forceps"]  # stapler/prograsp 供 Opus 標記用
+         "clip applier", "grasping retractor", "force bipolar", "cadiere forceps"]  # stapler/prograsp 供 LLM 標記用
 
 ap = argparse.ArgumentParser()
 ap.add_argument("--shard", type=int, default=0); ap.add_argument("--nshards", type=int, default=1)

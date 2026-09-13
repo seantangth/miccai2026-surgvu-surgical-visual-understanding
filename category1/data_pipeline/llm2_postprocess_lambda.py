@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-# Lambda 版：第二輪 Opus 結果後處理（frames640 池、weak_scale.json、rA 偵測器、cuda）
+# Lambda 版：第二輪 LLM 結果後處理（frames640 池、weak_scale.json、rA 偵測器、cuda）
 #!/usr/bin/env python3
-"""Opus 標框後處理：results/*.json → (prograsp 吸附偵測器 query 框) → 模板傳播 ±MAXSTEP 秒 → 補同幀其他已安裝類（s1 conf≥0.35）
-→ pseudo_opus_v1/{images,labels} ＋ 每類抽驗 montage。
-用法：bsenv/bin/python opus_postprocess.py [MAXSTEP=25] [THR=0.6]
+"""LLM 標框後處理：results/*.json → (prograsp 吸附偵測器 query 框) → 模板傳播 ±MAXSTEP 秒 → 補同幀其他已安裝類（s1 conf≥0.35）
+→ pseudo_llm_v1/{images,labels} ＋ 每類抽驗 montage。
+用法：bsenv/bin/python llm_postprocess.py [MAXSTEP=25] [THR=0.6]
 """
 import json, glob, sys, os, shutil, random, cv2, numpy as np
 from collections import Counter, defaultdict
 from pathlib import Path
 ROOT = Path.home() / "scaleup"
-FR = ROOT / "frames640"; RES = ROOT / "opus2_results"
-OUT = ROOT / "pseudo_opus_v2"; MONT = ROOT / "opus2_montage"
+FR = ROOT / "frames640"; RES = ROOT / "llm2_results"
+OUT = ROOT / "pseudo_llm_v2"; MONT = ROOT / "llm2_montage"
 MAXSTEP = int(sys.argv[1]) if len(sys.argv) > 1 else 25; THR = float(sys.argv[2]) if len(sys.argv) > 2 else 0.6
 CID = {"stapler": 11, "tipup": 4, "prograsp": 10}; IGNORE = {10, 11}
 GT2ID = {"needle driver": 0, "monopolar curved scissors": 1, "force bipolar": 2, "clip applier": 3, "tip-up fenestrated grasper": 4,
@@ -22,7 +22,7 @@ def iou(a, b):
     ix = max(0, min(a[2], b[2]) - max(a[0], b[0])); iy = max(0, min(a[3], b[3]) - max(a[1], b[1])); i = ix * iy
     return i / ((a[2]-a[0])*(a[3]-a[1]) + (b[2]-b[0])*(b[3]-b[1]) - i + 1e-9)
 
-# 1. 讀 Opus 結果
+# 1. 讀 LLM 結果
 seeds = []   # (cls_key, vid, sec, [x1,y1,x2,y2], conf)
 for f in sorted(glob.glob(str(RES / "*.json"))):
     key = Path(f).stem.rsplit("_", 1)[0]
@@ -39,7 +39,7 @@ for f in sorted(glob.glob(str(RES / "*.json"))):
             x1, x2 = max(0, min(x1, x2)), min(W, max(x1, x2)); y1, y2 = max(0, min(y1, y2)), min(H, max(y1, y2))
             if x2 - x1 < 8 or y2 - y1 < 8: continue
             seeds.append((key, vid, sec, [x1, y1, x2, y2], float(r.get("confidence", 0.5))))
-print("opus seeds:", Counter(s[0] for s in seeds))
+print("llm seeds:", Counter(s[0] for s in seeds))
 
 # 2. 偵測器（s1）query 框：prograsp 吸附；其他類補框
 from ultralytics import RTDETR
@@ -76,14 +76,14 @@ def propagate(vid, sec, box):
     return out
 frames = defaultdict(list)   # (vid,sec) -> [(cid, box, src)]
 for key, vid, sec, box, conf in seeds:
-    frames[(vid, sec)].append((CID[key], box, "opus", 1.0))
+    frames[(vid, sec)].append((CID[key], box, "llm", 1.0))
     for s2, nb, ncc in propagate(vid, sec, box):
         frames[(vid, s2)].append((CID[key], nb, "prop", float(ncc)))
 print("frames after propagation:", len(frames), Counter(x[2] for v in frames.values() for x in v))
-# 同幀同類去重：opus 優先、其次 NCC 高者；每類最多 installed 數（未知則 1）；任何同類 IoU>0.3 視為重複
+# 同幀同類去重：llm 優先、其次 NCC 高者；每類最多 installed 數（未知則 1）；任何同類 IoU>0.3 視為重複
 for (vid, sec), items in frames.items():
     installed = Counter(GT2ID[t] for t in (weak.get(vid, {}).get(str(sec)) or []) if t in GT2ID)
-    items.sort(key=lambda x: (x[2] != "opus", -x[3]))
+    items.sort(key=lambda x: (x[2] != "llm", -x[3]))
     keep = []
     for cid, box, src, q in items:
         cap = max(1, installed.get(cid, 1))
@@ -94,7 +94,7 @@ for (vid, sec), items in frames.items():
     frames[(vid, sec)] = keep
 print("after per-frame dedupe:", Counter(x[2] for v in frames.values() for x in v))
 
-# 4. 去重（同幀同類 IoU>0.5 留 opus 優先）＋ 補其他已安裝類（s1 conf>=0.35，與目標框 IoU<=0.5）
+# 4. 去重（同幀同類 IoU>0.5 留 llm 優先）＋ 補其他已安裝類（s1 conf>=0.35，與目標框 IoU<=0.5）
 OUT_I, OUT_L = OUT / "images", OUT / "labels"; shutil.rmtree(OUT, ignore_errors=True); OUT_I.mkdir(parents=True); OUT_L.mkdir(parents=True)
 stat = Counter()
 for (vid, sec), items in frames.items():
@@ -106,16 +106,16 @@ for (vid, sec), items in frames.items():
         if sum(1 for cc, _, _ in keep if cc == c) >= installed[c]: continue
         if any(iou(b, kb) > 0.5 for _, kb, _ in keep): continue
         keep.append((c, b, "s1")); stat["s1_extra"] += 1
-    stem = f"{vid}_sec{sec:06d}_opus"
+    stem = f"{vid}_sec{sec:06d}_llm"
     shutil.copy(FR / vid / f"sec_{sec:06d}.jpg", OUT_I / f"{stem}.jpg")
     (OUT_L / f"{stem}.txt").write_text("\n".join(f"{c} {(b[0]+b[2])/2/W:.6f} {(b[1]+b[3])/2/H:.6f} {(b[2]-b[0])/W:.6f} {(b[3]-b[1])/H:.6f}" for c, b, _ in keep))
     for c, _, src in keep: stat[f"{c}:{src}"] += 1
 print("STATS:", dict(stat)); json.dump({"stats": dict(stat), "n_frames": len(frames)}, open(OUT / "stats.json", "w"), indent=1)
 
-# 5. 抽驗 montage（每類 30 幀，opus 種子優先）
+# 5. 抽驗 montage（每類 30 幀，llm 種子優先）
 MONT.mkdir(parents=True, exist_ok=True); random.seed(0)
 for key, cid in CID.items():
-    picks = [(v, s) for (v, s), items in frames.items() if any(c == cid and src == "opus" for c, _, src in items)]
+    picks = [(v, s) for (v, s), items in frames.items() if any(c == cid and src == "llm" for c, _, src in items)]
     random.shuffle(picks); picks = picks[:30]; tiles = []
     for v, s in picks:
         im = cv2.imread(str(FR / v / f"sec_{s:06d}.jpg"))

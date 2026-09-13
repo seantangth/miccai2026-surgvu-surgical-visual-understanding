@@ -143,8 +143,8 @@ Stages, in order:
    video. 260 videos → 377,388 frames.
 2. **Weak labels** — `weak_labels_scale.py` over `tools.csv`.
 3. **Pseudo-labels** — `pseudo_label_scale.py <frames> <weak.json> <out> <teacher1.pt> [teacher2.pt]`.
-4. **Model-assisted boxes** for the three never-detected classes — `opus_candidates.py`,
-   `opus_postprocess.py`, `opus2_batches.py` (see disclosure below).
+4. **Model-assisted boxes** for the three never-detected classes — `llm_candidates.py`,
+   `llm_postprocess.py`, `llm2_batches.py` (see disclosure below).
 5. **Train** — `category1/training/train_v5.sh`, driven by environment variables. The two
    submitted models:
 
@@ -227,7 +227,7 @@ Required by the challenge rules.
   frames by template-matching propagation. A further 202 grasping-retractor frames came from
   32 hand-seeded boxes propagated the same way, giving 2,298 model-assisted frames in total,
   i.e. 2.5% of the training set. The prompting protocol,
-  acceptance thresholds and propagation code are in `category1/data_pipeline/opus*.py`. Quality
+  acceptance thresholds and propagation code are in `category1/data_pipeline/llm*.py`. Quality
   was checked by visual sampling only; there is no ground truth for these classes in the
   official validation set. The annotation files themselves are available to the organizers on
   request.
